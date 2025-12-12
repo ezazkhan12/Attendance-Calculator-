@@ -5,66 +5,243 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Attendance Calculator</title>
 
-<!-- JS PDF LIBRARY -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background: #f0f4f7;
+        font-family: "Poppins", sans-serif;
+        background: #eef3f9;
         margin: 0;
         padding: 0;
     }
 
-    h1, h2 {
+    h1 {
         text-align: center;
-        color: #003366;
+        padding: 20px;
+        background: #2d77ff;
+        color: white;
+        margin: 0;
+        font-size: 26px;
     }
 
     .container {
-        width: 90%;
+        width: 95%;
         max-width: 900px;
+        margin: auto;
         background: white;
         padding: 20px;
-        margin: 20px auto;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #bbb;
+        margin-top: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px #c7c7c7;
     }
 
-    .input-group {
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 7px;
         margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 15px;
     }
 
     label {
-        font-weight: bold;
-    }
-
-    input {
-        width: 100%;
-        padding: 8px;
-        margin-top: 4px;
-        border-radius: 5px;
-        border: 1px solid #aaa;
-    }
-
-    .subject-box {
-        padding: 15px;
-        background: #e8f0fe;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #aac;
+        font-weight: 600;
     }
 
     button {
-        padding: 12px 20px;
-        background: #0059b3;
+        padding: 12px 18px;
+        background: #2d77ff;
         color: white;
         border: none;
         border-radius: 8px;
         cursor: pointer;
+        margin: 10px 5px 10px 0;
         font-size: 16px;
     }
 
+    button:hover {
+        background: #1a5fe8;
+    }
+
+    .subject-box {
+        border: 1px solid #bcd3ff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        background: #f6f9ff;
+    }
+
+    .footer {
+        margin-top: 30px;
+        text-align: center;
+        padding: 15px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    #reportSection {
+        margin-top: 20px;
+        padding: 20px;
+        background: #fdfdfd;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Attendance Calculator</h1>
+
+<div class="container">
+    <h2>User Details</h2>
+
+    <label>Name (Mandatory)</label>
+    <input type="text" id="name">
+
+    <label>Roll Number (Mandatory)</label>
+    <input type="text" id="roll">
+
+    <label>Section</label>
+    <input type="text" id="section">
+
+    <label>Year</label>
+    <input type="text" id="year">
+
+    <label>Semester</label>
+    <input type="text" id="sem">
+
+    <h2>Subjects (4 Default)</h2>
+
+    <div id="subjects"></div>
+
+    <button onclick="calculateAttendance()">Calculate Attendance</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+
+    <div id="reportSection"></div>
+</div>
+
+<div class="footer">
+    Designed and Developed by Ezaz Khan
+</div>
+
+<!-- REQUIRED LIBRARIES FOR PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+let defaultSubjects = [
+    "Physical Pharmacy",
+    "Pharmaceutical Organic Chemistry",
+    "Pharmaceutical Microbiology",
+    "Pharmaceutical Engineering"
+];
+
+function loadDefaultSubjects() {
+    let box = document.getElementById("subjects");
+
+    defaultSubjects.forEach((sub, index) => {
+        box.innerHTML += `
+        <div class="subject-box">
+            <h3>${index + 1}. ${sub}</h3>
+            <label>Theory Total Days</label>
+            <input type="number" id="t_total_${index}">
+            <label>Theory Attended Days</label>
+            <input type="number" id="t_att_${index}">
+            
+            <label>Lab Total Days</label>
+            <input type="number" id="l_total_${index}">
+            <label>Lab Attended Days</label>
+            <input type="number" id="l_att_${index}">
+        </div>`;
+    });
+}
+
+loadDefaultSubjects();
+
+function calculateAttendance() {
+    let name = document.getElementById("name").value.trim();
+    let roll = document.getElementById("roll").value.trim();
+
+    if (name === "" || roll === "") {
+        alert("Name and Roll Number are mandatory!");
+        return;
+    }
+
+    let section = document.getElementById("section").value;
+    let year = document.getElementById("year").value;
+    let sem = document.getElementById("sem").value;
+
+    let report = `<h2>Attendance Report</h2>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Roll Number:</strong> ${roll}</p>
+    ${section ? `<p><strong>Section:</strong> ${section}</p>` : ""}
+    ${year ? `<p><strong>Year:</strong> ${year}</p>` : ""}
+    ${sem ? `<p><strong>Semester:</strong> ${sem}</p>` : ""}`;
+
+    let totalPercentage = 0;
+
+    report += `<h3>Subject-wise Attendance</h3>`;
+
+    defaultSubjects.forEach((sub, index) => {
+        let t_total = Number(document.getElementById(`t_total_${index}`).value);
+        let t_att = Number(document.getElementById(`t_att_${index}`).value);
+        let l_total = Number(document.getElementById(`l_total_${index}`).value);
+        let l_att = Number(document.getElementById(`l_att_${index}`).value);
+
+        let t_percent = t_total ? ((t_att / t_total) * 100).toFixed(2) : 0;
+        let l_percent = l_total ? ((l_att / l_total) * 100).toFixed(2) : 0;
+
+        totalPercentage += Number(t_percent) + Number(l_percent);
+
+        report += `
+        <div style="margin-bottom:10px;">
+            <strong>${sub}</strong><br>
+            Theory: ${t_percent}%<br>
+            Lab: ${l_percent}%<br>
+        </div>`;
+    });
+
+    let overall = (totalPercentage / (defaultSubjects.length * 2)).toFixed(2);
+
+    report += `<h3>Overall Attendance: ${overall}%</h3>`;
+
+    document.getElementById("reportSection").innerHTML = report;
+}
+
+async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+
+    const report = document.getElementById("reportSection");
+    const canvas = await html2canvas(report);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgWidth = 190;
+    const pageHeight = 295;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 10;
+
+    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+        pdf.addPage();
+        position = -295;
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+    }
+
+    pdf.save("Attendance_Report.pdf");
+}
+</script>
+
+</body>
+</html>
     button:hover {
         background: #003d80;
     }
@@ -85,75 +262,6 @@
         background: #003366;
         color: white;
     }
-</style>
-
-</head>
-<body>
-
-<h1>Attendance Calculator</h1>
-
-<div class="container">
-
-    <h2>Student Details</h2>
-
-    <div class="input-group">
-        <label>Name*</label>
-        <input type="text" id="studentName" placeholder="Enter your name">
-    </div>
-
-    <div class="input-group">
-        <label>Roll Number*</label>
-        <input type="text" id="rollNo" placeholder="Enter roll number">
-    </div>
-
-    <div class="input-group">
-        <label>Section (optional)</label>
-        <input type="text" id="section">
-    </div>
-
-    <div class="input-group">
-        <label>Year (optional)</label>
-        <input type="text" id="year">
-    </div>
-
-    <div class="input-group">
-        <label>Semester (optional)</label>
-        <input type="text" id="semester">
-    </div>
-
-</div>
-
-
-<div class="container" id="subjectsContainer">
-    <h2>Subjects Attendance</h2>
-
-</div>
-
-<div class="container" style="text-align:center;">
-    <button onclick="calculateOverall()">Calculate Overall Attendance</button>
-    <button onclick="downloadPDF()" style="margin-left:10px;background:#009933;">Download PDF</button>
-</div>
-
-<div class="container" id="result" style="display:none;"></div>
-
-<footer>Designed and developed by Ezaz Khan</footer>
-
-<script>
-// Default 4 subjects
-const defaultSubjects = [
-    "Physical Pharmacy",
-    "Pharmaceutical Organic Chemistry",
-    "Pharmaceutical Microbiology",
-    "Pharmaceutical Engineering"
-];
-
-window.onload = () => {
-    defaultSubjects.forEach(sub => addSubject(sub));
-};
-
-function addSubject(name) {
-    const box = document.createElement("div");
-    box.className = "subject-box";
 
     box.innerHTML = `
         <h3>${name}</h3>
@@ -186,65 +294,4 @@ function calculateOverall() {
         return;
     }
 
-    let subjectBoxes = document.querySelectorAll(".subject-box");
-    let output = `
-        <h2>Attendance Report</h2>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Roll No:</b> ${roll}</p>
-        <p><b>Section:</b> ${document.getElementById("section").value}</p>
-        <p><b>Year:</b> ${document.getElementById("year").value}</p>
-        <p><b>Semester:</b> ${document.getElementById("semester").value}</p>
-        <hr>
-    `;
-
-    let totalPercent = 0;
-    let count = 0;
-
-    subjectBoxes.forEach((box, index) => {
-        let subject = defaultSubjects[index];
-
-        let tTotal = parseFloat(box.querySelector(".theoryTotal").value) || 0;
-        let tAtt = parseFloat(box.querySelector(".theoryAttended").value) || 0;
-        let lTotal = parseFloat(box.querySelector(".labTotal").value) || 0;
-        let lAtt = parseFloat(box.querySelector(".labAttended").value) || 0;
-
-        let theoryPercent = tTotal ? ((tAtt / tTotal) * 100).toFixed(2) : 0;
-        let labPercent = lTotal ? ((lAtt / lTotal) * 100).toFixed(2) : 0;
-
-        totalPercent += parseFloat(theoryPercent) + parseFloat(labPercent);
-        count += 2;
-
-        output += `
-            <h3>${subject}</h3>
-            <p><b>Theory Attendance:</b> ${theoryPercent}%</p>
-            <p><b>Lab Attendance:</b> ${labPercent}%</p>
-            <hr>
-        `;
-    });
-
-    let overall = (totalPercent / count).toFixed(2);
-
-    output += `<h2>Overall Attendance: ${overall}%</h2>`;
-
-    document.getElementById("result").innerHTML = output;
-    document.getElementById("result").style.display = "block";
-}
-
-// PDF DOWNLOAD
-function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-
-    pdf.html(document.getElementById("result"), {
-        callback: function(pdf) {
-            pdf.save("Attendance_Report.pdf");
-        },
-        x: 10,
-        y: 10
-    });
-}
-
-</script>
-
-</body>
-</html>
+    
