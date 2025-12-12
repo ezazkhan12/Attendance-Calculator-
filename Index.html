@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Calculator</title>
+
+<!-- JS PDF LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f4f7;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #003366;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 900px;
+        background: white;
+        padding: 20px;
+        margin: 20px auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #bbb;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+        border-radius: 5px;
+        border: 1px solid #aaa;
+    }
+
+    .subject-box {
+        padding: 15px;
+        background: #e8f0fe;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #aac;
+    }
+
+    button {
+        padding: 12px 20px;
+        background: #0059b3;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #003d80;
+    }
+
+    #result {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
+
+    footer {
+        text-align: center;
+        padding: 15px;
+        margin-top: 25px;
+        font-weight: bold;
+        background: #003366;
+        color: white;
+    }
+</style>
+
+</head>
+<body>
+
+<h1>Attendance Calculator</h1>
+
+<div class="container">
+
+    <h2>Student Details</h2>
+
+    <div class="input-group">
+        <label>Name*</label>
+        <input type="text" id="studentName" placeholder="Enter your name">
+    </div>
+
+    <div class="input-group">
+        <label>Roll Number*</label>
+        <input type="text" id="rollNo" placeholder="Enter roll number">
+    </div>
+
+    <div class="input-group">
+        <label>Section (optional)</label>
+        <input type="text" id="section">
+    </div>
+
+    <div class="input-group">
+        <label>Year (optional)</label>
+        <input type="text" id="year">
+    </div>
+
+    <div class="input-group">
+        <label>Semester (optional)</label>
+        <input type="text" id="semester">
+    </div>
+
+</div>
+
+
+<div class="container" id="subjectsContainer">
+    <h2>Subjects Attendance</h2>
+
+</div>
+
+<div class="container" style="text-align:center;">
+    <button onclick="calculateOverall()">Calculate Overall Attendance</button>
+    <button onclick="downloadPDF()" style="margin-left:10px;background:#009933;">Download PDF</button>
+</div>
+
+<div class="container" id="result" style="display:none;"></div>
+
+<footer>Designed and developed by Ezaz Khan</footer>
+
+<script>
+// Default 4 subjects
+const defaultSubjects = [
+    "Physical Pharmacy",
+    "Pharmaceutical Organic Chemistry",
+    "Pharmaceutical Microbiology",
+    "Pharmaceutical Engineering"
+];
+
+window.onload = () => {
+    defaultSubjects.forEach(sub => addSubject(sub));
+};
+
+function addSubject(name) {
+    const box = document.createElement("div");
+    box.className = "subject-box";
+
+    box.innerHTML = `
+        <h3>${name}</h3>
+
+        <label>Theory - Total Classes</label>
+        <input type="number" class="theoryTotal">
+
+        <label>Theory - Attended</label>
+        <input type="number" class="theoryAttended">
+
+        <br><br>
+
+        <label>Lab - Total Classes</label>
+        <input type="number" class="labTotal">
+
+        <label>Lab - Attended</label>
+        <input type="number" class="labAttended">
+    `;
+
+    document.getElementById("subjectsContainer").appendChild(box);
+}
+
+function calculateOverall() {
+
+    let name = document.getElementById("studentName").value.trim();
+    let roll = document.getElementById("rollNo").value.trim();
+
+    if (!name || !roll) {
+        alert("Name and Roll Number are mandatory!");
+        return;
+    }
+
+    let subjectBoxes = document.querySelectorAll(".subject-box");
+    let output = `
+        <h2>Attendance Report</h2>
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Roll No:</b> ${roll}</p>
+        <p><b>Section:</b> ${document.getElementById("section").value}</p>
+        <p><b>Year:</b> ${document.getElementById("year").value}</p>
+        <p><b>Semester:</b> ${document.getElementById("semester").value}</p>
+        <hr>
+    `;
+
+    let totalPercent = 0;
+    let count = 0;
+
+    subjectBoxes.forEach((box, index) => {
+        let subject = defaultSubjects[index];
+
+        let tTotal = parseFloat(box.querySelector(".theoryTotal").value) || 0;
+        let tAtt = parseFloat(box.querySelector(".theoryAttended").value) || 0;
+        let lTotal = parseFloat(box.querySelector(".labTotal").value) || 0;
+        let lAtt = parseFloat(box.querySelector(".labAttended").value) || 0;
+
+        let theoryPercent = tTotal ? ((tAtt / tTotal) * 100).toFixed(2) : 0;
+        let labPercent = lTotal ? ((lAtt / lTotal) * 100).toFixed(2) : 0;
+
+        totalPercent += parseFloat(theoryPercent) + parseFloat(labPercent);
+        count += 2;
+
+        output += `
+            <h3>${subject}</h3>
+            <p><b>Theory Attendance:</b> ${theoryPercent}%</p>
+            <p><b>Lab Attendance:</b> ${labPercent}%</p>
+            <hr>
+        `;
+    });
+
+    let overall = (totalPercent / count).toFixed(2);
+
+    output += `<h2>Overall Attendance: ${overall}%</h2>`;
+
+    document.getElementById("result").innerHTML = output;
+    document.getElementById("result").style.display = "block";
+}
+
+// PDF DOWNLOAD
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    pdf.html(document.getElementById("result"), {
+        callback: function(pdf) {
+            pdf.save("Attendance_Report.pdf");
+        },
+        x: 10,
+        y: 10
+    });
+}
+
+</script>
+
+</body>
+</html>
