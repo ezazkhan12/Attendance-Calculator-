@@ -9,6 +9,61 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Password Screen */
+    #passwordBox {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #0f172a;
+    }
+
+    .box {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        text-align: center;
+        width: 280px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 10px;
+        width: 100%;
+        background: #2563eb;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background: #1e40af;
+    }
+
+    #error {
+        color: red;
+        margin-top: 10px;
+    }
+
+    /* Website Content */
+    #content {
+        display: none;
+        padding: 20px;
+    }
     body {
         font-family: "Poppins", sans-serif;
         background: #eef3f9;
@@ -130,8 +185,34 @@
 <!-- REQUIRED LIBRARIES FOR PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- PASSWORD SCREEN -->
+<div id="passwordBox">
+    <div class="box">
+        <h2>Enter Password</h2>
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="checkPassword()">Submit</button>
+        <p id="error"></p>
+    </div>
+</div>
+
+<!-- MAIN WEBSITE -->
+<div id="content">
+    <h1>Welcome Ezaz 👋</h1>
+    <p>Your website content goes here.</p>
+</div>
 
 <script>
+function checkPassword() {
+        const correctPassword = "9101188370";
+        const enteredPassword = document.getElementById("password").value;
+
+        if (enteredPassword === correctPassword) {
+            document.getElementById("passwordBox").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        } else {
+            document.getElementById("error").innerText = "Wrong password!";
+        }
+    }
 let defaultSubjects = [
     "Physical Pharmacy",
     "Pharmaceutical Organic Chemistry",
