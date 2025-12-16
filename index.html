@@ -10,209 +10,247 @@
 
 <style>
 body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #eef3f9;
+}
 
-    /* Password Screen */
-    #passwordBox {
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #0f172a;
-    }
+/* Password Screen */
+#passwordBox {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0f172a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
-    .box {
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        text-align: center;
-        width: 280px;
-    }
+.box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
 
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 10px;
-        font-size: 16px;
-    }
+.box h2 {
+    margin-top: 0;
+    color: #333;
+}
 
-    button {
-        margin-top: 15px;
-        padding: 10px;
-        width: 100%;
-        background: #2563eb;
-        color: white;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-        border-radius: 5px;
-    }
+#password {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
-    button:hover {
-        background: #1e40af;
-    }
+#password:focus {
+    border-color: #2563eb;
+    outline: none;
+}
 
-    #error {
-        color: red;
-        margin-top: 10px;
-    }
+#passwordBox button {
+    margin-top: 15px;
+    padding: 12px;
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    font-weight: 600;
+}
 
-    /* Website Content */
-    #content {
-        display: none;
-        padding: 20px;
-    }
-    body {
-        font-family: "Poppins", sans-serif;
-        background: #eef3f9;
-        margin: 0;
-        padding: 0;
-    }
+#passwordBox button:hover {
+    background: #1e40af;
+}
 
-    h1 {
-        text-align: center;
-        padding: 20px;
-        background: #2d77ff;
-        color: white;
-        margin: 0;
-        font-size: 26px;
-    }
+#error {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
 
-    .container {
-        width: 95%;
-        max-width: 900px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        margin-top: 20px;
-        border-radius: 12px;
-        box-shadow: 0 0 10px #c7c7c7;
-    }
+/* Main Content - Hidden by default */
+#mainContent {
+    display: none;
+}
 
-    input, select {
-        width: 100%;
-        padding: 10px;
-        margin-top: 7px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 15px;
-    }
+h1 {
+    text-align: center;
+    padding: 20px;
+    background: #2d77ff;
+    color: white;
+    margin: 0;
+    font-size: 26px;
+}
 
-    label {
-        font-weight: 600;
-    }
+.container {
+    width: 95%;
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #c7c7c7;
+}
 
-    button {
-        padding: 12px 18px;
-        background: #2d77ff;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        margin: 10px 5px 10px 0;
-        font-size: 16px;
-    }
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 7px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    box-sizing: border-box;
+}
 
-    button:hover {
-        background: #1a5fe8;
-    }
+label {
+    font-weight: 600;
+    display: block;
+}
 
-    .subject-box {
-        border: 1px solid #bcd3ff;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 12px;
-        background: #f6f9ff;
-    }
+button {
+    padding: 12px 18px;
+    background: #2d77ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px 5px 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
 
-    .footer {
-        margin-top: 30px;
-        text-align: center;
-        padding: 15px;
-        color: #333;
-        font-weight: 600;
-    }
+button:hover {
+    background: #1a5fe8;
+}
 
-    #reportSection {
-        margin-top: 20px;
-        padding: 20px;
-        background: #fdfdfd;
-        border-radius: 12px;
-        border: 1px solid #ddd;
-    }
+.subject-box {
+    border: 1px solid #bcd3ff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background: #f6f9ff;
+}
+
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    padding: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+#reportSection {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fdfdfd;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.subject-box h3 {
+    margin-top: 0;
+    color: #1a5fe8;
+}
 </style>
 </head>
 
 <body>
-
-<h1>Attendance Calculator</h1>
-
-<div class="container">
-    <h2>User Details</h2>
-
-    <label>Name (Mandatory)</label>
-    <input type="text" id="name">
-
-    <label>Roll Number (Mandatory)</label>
-    <input type="text" id="roll">
-
-    <label>Section</label>
-    <input type="text" id="section">
-
-    <label>Year</label>
-    <input type="text" id="year">
-
-    <label>Semester</label>
-    <input type="text" id="sem">
-
-    <h2>Subjects (4 Default)</h2>
-
-    <div id="subjects"></div>
-
-    <button onclick="calculateAttendance()">Calculate Attendance</button>
-    <button onclick="downloadPDF()">Download PDF</button>
-
-    <div id="reportSection"></div>
-</div>
-
-<div class="footer">
-    Designed and Developed by Ezaz Khan
-</div>
-
-<!-- REQUIRED LIBRARIES FOR PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<!-- PASSWORD SCREEN -->
+<!-- PASSWORD SCREEN (Visible First) -->
 <div id="passwordBox">
     <div class="box">
-        <h2>Enter Password</h2>
-        <input type="password" id="password" placeholder="Password">
+        <h2>Attendance Calculator</h2>
+        <p>Enter password to access</p>
+        <input type="password" id="password" placeholder="Enter password">
         <button onclick="checkPassword()">Submit</button>
         <p id="error"></p>
     </div>
 </div>
 
-<!-- MAIN WEBSITE -->
-<div id="content">
-    <h1>Welcome Ezaz 👋</h1>
-    <p>Your website content goes here.</p>
+<!-- MAIN WEBSITE CONTENT (Hidden Initially) -->
+<div id="mainContent">
+    <h1>Attendance Calculator</h1>
+    
+    <div class="container">
+        <h2>User Details</h2>
+        
+        <label>Name (Mandatory)</label>
+        <input type="text" id="name">
+        
+        <label>Roll Number (Mandatory)</label>
+        <input type="text" id="roll">
+        
+        <label>Section</label>
+        <input type="text" id="section">
+        
+        <label>Year</label>
+        <input type="text" id="year">
+        
+        <label>Semester</label>
+        <input type="text" id="sem">
+        
+        <h2>Subjects (4 Default)</h2>
+        
+        <div id="subjects"></div>
+        
+        <button onclick="calculateAttendance()">Calculate Attendance</button>
+        <button onclick="downloadPDF()">Download PDF</button>
+        
+        <div id="reportSection"></div>
+    </div>
+    
+    <div class="footer">
+        Designed and Developed by Ezaz Khan
+    </div>
 </div>
 
-<script>
-function checkPassword() {
-        const correctPassword = "9101188370";
-        const enteredPassword = document.getElementById("password").value;
+<!-- REQUIRED LIBRARIES FOR PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        if (enteredPassword === correctPassword) {
-            document.getElementById("passwordBox").style.display = "none";
-            document.getElementById("content").style.display = "block";
-        } else {
-            document.getElementById("error").innerText = "Wrong password!";
-        }
+<script>
+// PASSWORD FUNCTION
+function checkPassword() {
+    const correctPassword = "9101188370";
+    const enteredPassword = document.getElementById("password").value;
+    const errorElement = document.getElementById("error");
+
+    if (enteredPassword === correctPassword) {
+        // Hide password screen
+        document.getElementById("passwordBox").style.display = "none";
+        // Show main content
+        document.getElementById("mainContent").style.display = "block";
+    } else {
+        errorElement.innerText = "Wrong password! Please try again.";
+        // Clear the input field
+        document.getElementById("password").value = "";
+        // Focus back to password field
+        document.getElementById("password").focus();
     }
+}
+
+// Allow pressing Enter to submit password
+document.getElementById("password").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        checkPassword();
+    }
+});
+
+// ATTENDANCE CALCULATOR FUNCTIONS
 let defaultSubjects = [
     "Physical Pharmacy",
     "Pharmaceutical Organic Chemistry",
@@ -222,25 +260,29 @@ let defaultSubjects = [
 
 function loadDefaultSubjects() {
     let box = document.getElementById("subjects");
+    box.innerHTML = ""; // Clear any existing content
 
     defaultSubjects.forEach((sub, index) => {
         box.innerHTML += `
         <div class="subject-box">
             <h3>${index + 1}. ${sub}</h3>
             <label>Theory Total Days</label>
-            <input type="number" id="t_total_${index}">
+            <input type="number" id="t_total_${index}" min="0">
             <label>Theory Attended Days</label>
-            <input type="number" id="t_att_${index}">
+            <input type="number" id="t_att_${index}" min="0">
             
             <label>Lab Total Days</label>
-            <input type="number" id="l_total_${index}">
+            <input type="number" id="l_total_${index}" min="0">
             <label>Lab Attended Days</label>
-            <input type="number" id="l_att_${index}">
+            <input type="number" id="l_att_${index}" min="0">
         </div>`;
     });
 }
 
-loadDefaultSubjects();
+// Initialize subjects when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadDefaultSubjects();
+});
 
 function calculateAttendance() {
     let name = document.getElementById("name").value.trim();
@@ -263,39 +305,52 @@ function calculateAttendance() {
     ${sem ? `<p><strong>Semester:</strong> ${sem}</p>` : ""}`;
 
     let totalPercentage = 0;
+    let subjectCount = 0;
 
     report += `<h3>Subject-wise Attendance</h3>`;
 
     defaultSubjects.forEach((sub, index) => {
-        let t_total = Number(document.getElementById(`t_total_${index}`).value);
-        let t_att = Number(document.getElementById(`t_att_${index}`).value);
-        let l_total = Number(document.getElementById(`l_total_${index}`).value);
-        let l_att = Number(document.getElementById(`l_att_${index}`).value);
+        let t_total = Number(document.getElementById(`t_total_${index}`).value) || 0;
+        let t_att = Number(document.getElementById(`t_att_${index}`).value) || 0;
+        let l_total = Number(document.getElementById(`l_total_${index}`).value) || 0;
+        let l_att = Number(document.getElementById(`l_att_${index}`).value) || 0;
 
-        let t_percent = t_total ? ((t_att / t_total) * 100).toFixed(2) : 0;
-        let l_percent = l_total ? ((l_att / l_total) * 100).toFixed(2) : 0;
+        let t_percent = t_total > 0 ? ((t_att / t_total) * 100).toFixed(2) : 0;
+        let l_percent = l_total > 0 ? ((l_att / l_total) * 100).toFixed(2) : 0;
 
-        totalPercentage += Number(t_percent) + Number(l_percent);
+        if (t_total > 0) {
+            totalPercentage += Number(t_percent);
+            subjectCount++;
+        }
+        if (l_total > 0) {
+            totalPercentage += Number(l_percent);
+            subjectCount++;
+        }
 
         report += `
-        <div style="margin-bottom:10px;">
+        <div style="margin-bottom:15px; padding:10px; background:#f5f5f5; border-radius:5px;">
             <strong>${sub}</strong><br>
-            Theory: ${t_percent}%<br>
-            Lab: ${l_percent}%<br>
+            Theory: ${t_percent}% (${t_att}/${t_total})<br>
+            Lab: ${l_percent}% (${l_att}/${l_total})<br>
         </div>`;
     });
 
-    let overall = (totalPercentage / (defaultSubjects.length * 2)).toFixed(2);
+    let overall = subjectCount > 0 ? (totalPercentage / subjectCount).toFixed(2) : 0;
 
-    report += `<h3>Overall Attendance: ${overall}%</h3>`;
+    report += `<h3 style="color:#2d77ff; margin-top:20px;">Overall Attendance: ${overall}%</h3>`;
 
     document.getElementById("reportSection").innerHTML = report;
 }
 
 async function downloadPDF() {
+    const report = document.getElementById("reportSection");
+    if (!report.innerHTML.trim()) {
+        alert("Please calculate attendance first!");
+        return;
+    }
+
     const { jsPDF } = window.jspdf;
 
-    const report = document.getElementById("reportSection");
     const canvas = await html2canvas(report);
     const imgData = canvas.toDataURL("image/png");
 
@@ -312,7 +367,7 @@ async function downloadPDF() {
 
     while (heightLeft > 0) {
         pdf.addPage();
-        position = -295;
+        position = heightLeft - imgHeight;
         pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
     }
@@ -323,4 +378,3 @@ async function downloadPDF() {
 
 </body>
 </html>
-    
