@@ -691,7 +691,7 @@ body {
         <button onclick="checkPassword()"><i class="fas fa-unlock"></i> ACCESS CALCULATOR</button>
         <p id="error"></p>
         <div class="hint">
-            <i class="fas fa-lightbulb"></i> Hint: Developer's contact number
+            <i class="fas fa-lightbulb"></i> Hint: Developer's friends nick name
         </div>
     </div>
 </div>
@@ -809,7 +809,7 @@ function checkPassword() {
             showToast("Welcome to Attendance Calculator Pro! 🎉");
         }, 500);
     } else {
-        errorElement.innerText = "Incorrect password! Hint: It's the developer's contact number";
+        errorElement.innerText = "Incorrect password! Hint: It's the developer's friends nick name";
         document.getElementById("password").value = "";
         document.getElementById("password").focus();
     }
